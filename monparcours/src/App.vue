@@ -1,8 +1,14 @@
 <script setup>
 
+import MapContainer from './components/MapContainer.vue';
+
 </script>
 
 <template>
   
-  <h1>Hello</h1>
+  <MapContainer/>
 </template>
+
+<style>
+body {margin: 0;}
+</style>
