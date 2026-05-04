@@ -1,30 +1,56 @@
 <template>
+    <div class="main-layout">
     <div class="map-wrap">
         <!-- a simple button for my location -->
          <button @click="findMyLocation" class="btn-location">My Position</button>
-    </div>
+    
 <!-- create map in div -->
-<div id="map" style="height: 100vh; width: 100%;"  ></div>
+<div id="map" style="height: 100vh; width: 100%;"  >
+
+</div>
+</div>
+<Sidebar :etapes="etapes" />
+</div>
 </template>
 
 <script setup>
 
 import { onMounted, ref } from 'vue';
 import L from 'leaflet';
+import Sidebar from './Sidebar.vue';
 
 // define map  , everyone can see it
 const myMap=ref(null);
+const etapes=ref([]); // every etape save in 
 
 onMounted(()=>{
 
-    // When the app opens, the map of Lausanne will appear
+    // When the app opens, the map of yverdon will appear
     myMap.value=L.map('map').setView([46.7826,6.6449],13) // yverdon
 
     // z: zoom  x and y : Coordinate squares
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
         attribution:'© OpenStreetMap contributors'
     }).addTo(myMap.value);
-})
+
+    // when onclick , new points add
+myMap.value.on('click',(e)=>{
+    const newEtape={
+        id:Date.now(),
+        lat: e.latlng.lat,
+        lng:e.latlng.lng,
+        name: "Point "+ (etapes.value.length+1)
+    };
+    etapes.value.push(newEtape);
+
+    //on map
+    L.marker([e.latlng.lat,e.latlng.lng])
+    .addTo(myMap.value)
+    .bindPopup(newEtape.name)
+});
+});
+
+
 
 // function for find user'ss location
 const findMyLocation =()=>{
@@ -68,8 +94,15 @@ const findMyLocation =()=>{
 
 <style scoped>
 
+.main-layout {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
 .map-wrap {
     position: relative;
+    flex-grow: 1;
 
 }
 
