@@ -6,7 +6,7 @@
         </div>
 
         <EtapeItem
-        v-for="(Point,index) in etapes"
+        v-for="(point,index) in etapes"
         :key="point.id"
         :etape="point"
         :index="index+1"
@@ -23,7 +23,7 @@
 
 <script setup>
 
-import { point } from 'leaflet';
+//import { point } from 'leaflet';
 import EtapeItem from './EtapeItem.vue';
 defineProps(['etapes'])
 
