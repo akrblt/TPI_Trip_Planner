@@ -39,7 +39,8 @@ myMap.value.on('click',(e)=>{
         id:Date.now(),
         lat: e.latlng.lat,
         lng:e.latlng.lng,
-        name: "Point "+ (etapes.value.length+1)
+        name: "Point "+ (etapes.value.length+1),
+        comment: "" // for commentaire
     };
     etapes.value.push(newEtape);
 
