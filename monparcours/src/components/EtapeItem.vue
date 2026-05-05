@@ -1,11 +1,27 @@
 <template>
 
-    <div class="etape-card">
+    <div class="etape-card" :style="{borderLeftColor:etape.color}">
         <div class="card-header">
             <!-- titre  -->
             <strong> #{{ index }}</strong> - {{ etape.name }}
 
         </div>
+<!-- Color selection  -->
+        <div class="color-selection">
+            <span class="label-text">Point color : </span>
+            <div class="palette">
+                <button
+                v-for="color in availableColors"
+                :key="color"
+                type="button"
+                class="color-btn"
+                :style="{ backgroundColor: color}"
+                :class="{active:etape.color===color}"
+                @click="selectColor(color)"
+                ></button>
+            </div>
+        </div>
+
         <!-- commentaire  -->
          <div class="comment-section">
             <label for="comment-input">Commentaire</label>
@@ -22,7 +38,24 @@
 
     <script setup>
 
-    defineProps(['etape','index']);
+   const props= defineProps(['etape','index']);
+      
+    // for send information
+const emit=defineEmits(['color-changed']);
+    
+    // color options
+    const availableColors=['#3388ff', '#ff4444', '#44bb44', '#ffbb33', '#aa66cc'];
+
+
+
+//When a color is selected, both update the data and notify the user
+const selectColor = (color)=> {
+    props.etape.color=color;
+    emit('color-changed',{id:props.etape.id,
+                            color:color}
+)}
+
+
 
 </script>
 
@@ -41,8 +74,45 @@
     margin-bottom: 10px;
     font-size: 1.1em;
 }
+.color-selection {
+    margin-bottom: 15px;
+}
+
+.label-text {
+    display: block;
+    font-size: 0.9em;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+.palette {
+    display: flex;
+    gap: 10px;
+}
+
+.color-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 0 3px rgba(0,0,0,0.2);
+    cursor: pointer;
+    padding: 0;
+}
+
+.color-btn.active {
+    border: 2px solid #333;
+    transform: scale(1.1);
+
+}
 
 .comment-section label {
+display: block;
+font-size: 0.9em;
+margin-bottom: 5px;
+}
+
+.comment-section textarea {
     width: 100%;
     height: 60px;
     padding: 8px;
@@ -50,6 +120,7 @@
     border-radius: 4px;
     resize: vertical;
     font-family: inherit;
+    box-sizing: border-box;
 }
 
 </style>

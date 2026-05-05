@@ -3,13 +3,14 @@
     <div class="map-wrap">
         <!-- a simple button for my location -->
          <button @click="findMyLocation" class="btn-location">My Position</button>
+
     
 <!-- create map in div -->
 <div id="map" style="height: 100vh; width: 100%;"  >
 
 </div>
 </div>
-<Sidebar :etapes="etapes" />
+<Sidebar :etapes="etapes" @color-changed="updateMarkerColor" />
 </div>
 </template>
 
@@ -22,6 +23,8 @@ import Sidebar from './Sidebar.vue';
 // define map  , everyone can see it
 const myMap=ref(null);
 const etapes=ref([]); // every etape save in 
+
+const markerObjects=ref({}) //creating an object to track the markers
 
 onMounted(()=>{
 
@@ -40,17 +43,44 @@ myMap.value.on('click',(e)=>{
         lat: e.latlng.lat,
         lng:e.latlng.lng,
         name: "Point "+ (etapes.value.length+1),
-        comment: "" // for commentaire
+        comment: "" ,// for commentaire
+        color:'#4595fc'
     };
     etapes.value.push(newEtape);
 
+    //  use `circleMarker` when creating markers because it’s easier to change its color
+    const marker= L.circleMarker([e.latlng.lat,e.latlng.lng],{
+        radius:10,
+        fillColor: newEtape.color,
+        color:"#fff",
+        weight:2,
+        opacity:1,
+        fillOpacity:0.9
+    })
+     .addTo(myMap.value)
+    .bindPopup(newEtape.name);
+    
+
     //on map
-    L.marker([e.latlng.lat,e.latlng.lng])
-    .addTo(myMap.value)
-    .bindPopup(newEtape.name)
+   // L.marker([e.latlng.lat,e.latlng.lng])
+   
+
+    // marker save with id in MarkerObject
+    markerObjects.value[newEtape.id]=marker
 });
 });
 
+// updating the color using Leaflet's built-in function
+const updateMarkerColor = (data) =>{
+    const marker= markerObjects.value[data.id];
+    if (marker) {
+        marker.setStyle({
+            fillColor:data.color,
+            color:data.color
+        });
+        marker.redraw();
+    }
+}
 
 
 // function for find user'ss location

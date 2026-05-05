@@ -10,6 +10,7 @@
         :key="point.id"
         :etape="point"
         :index="index+1"
+        @color-changed="(data)=>$emit('color-changed',data)"
 
 
         />
@@ -26,6 +27,8 @@
 //import { point } from 'leaflet';
 import EtapeItem from './EtapeItem.vue';
 defineProps(['etapes'])
+
+
 
 </script>
 
