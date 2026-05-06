@@ -44,7 +44,8 @@ myMap.value.on('click',(e)=>{
         lng:e.latlng.lng,
         name: "Point "+ (etapes.value.length+1),
         comment: "" ,// for commentaire
-        color:'#4595fc'
+        color:'#4595fc',
+        arrivalTime:''
     };
     etapes.value.push(newEtape);
 

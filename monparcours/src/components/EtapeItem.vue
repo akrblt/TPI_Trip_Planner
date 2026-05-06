@@ -22,6 +22,19 @@
             </div>
         </div>
 
+        <!-- Arrival time-->
+         <div class="time-section">
+            <label for="arrival-time">Arrival time</label>
+            <input 
+            id="arrival-time"
+            type="time"
+            v-model="etape.arrivalTime"
+            step="60"
+            
+            />
+            <small class="time-hint">Format: HH:MM</small>
+         </div>
+
         <!-- commentaire  -->
          <div class="comment-section">
             <label for="comment-input">Commentaire</label>
@@ -44,7 +57,7 @@
 const emit=defineEmits(['color-changed']);
     
     // color options
-    const availableColors=['#3388ff', '#ff4444', '#44bb44', '#ffbb33', '#aa66cc'];
+    const availableColors=['#3388ff', '#ff4444', '#44bb44', '#ffbb33', '#aa66cc','#f57627','#f527ad','#27f5f2'];
 
 
 
@@ -121,6 +134,25 @@ margin-bottom: 5px;
     resize: vertical;
     font-family: inherit;
     box-sizing: border-box;
+}
+
+.time-section {
+    margin-bottom: 15px;
+}
+
+.time-section label {
+    display: block;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+.time-section input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-family: inherit;
 }
 
 </style>
