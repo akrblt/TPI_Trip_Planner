@@ -71,10 +71,17 @@ myMap.value.on('click',(e)=>{
         weight:2,
         opacity:1,
         fillOpacity:0.9,
+        fill:true
         
     })
      .addTo(myMap.value)
-    .bindPopup(newEtape.name)
+    .bindPopup(`Point ${number}`)
+    .bindTooltip(`${number}`, {
+    permanent: true,
+    direction: 'top',
+    
+    className: 'number-label'
+    });
     
 
     //on map
