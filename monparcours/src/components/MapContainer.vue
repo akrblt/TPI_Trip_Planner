@@ -3,6 +3,9 @@
     <div class="map-wrap">
         <!-- a simple button for my location -->
          <button @click="findMyLocation" class="btn-location">My Position</button>
+         <button @click="drawRoute" class="btn-route">
+            Draw Lines
+         </button>
 
     
 <!-- create map in div -->
@@ -10,7 +13,10 @@
 
 </div>
 </div>
-<Sidebar :etapes="etapes" @color-changed="updateMarkerColor" />
+<Sidebar :etapes="etapes" 
+@color-changed="updateMarkerColor"
+  />
+
 </div>
 </template>
 
@@ -20,11 +26,16 @@ import { onMounted, ref } from 'vue';
 import L from 'leaflet';
 import Sidebar from './Sidebar.vue';
 
+
+
 // define map  , everyone can see it
 const myMap=ref(null);
 const etapes=ref([]); // every etape save in 
 
 const markerObjects=ref({}) //creating an object to track the markers
+
+const routeLine=ref(null);
+
 
 onMounted(()=>{
 
@@ -49,17 +60,21 @@ myMap.value.on('click',(e)=>{
     };
     etapes.value.push(newEtape);
 
+    const number=etapes.value.length
+    
+
     //  use `circleMarker` when creating markers because it’s easier to change its color
     const marker= L.circleMarker([e.latlng.lat,e.latlng.lng],{
-        radius:10,
+        radius:15,
         fillColor: newEtape.color,
         color:"#fff",
         weight:2,
         opacity:1,
-        fillOpacity:0.9
+        fillOpacity:0.9,
+        
     })
      .addTo(myMap.value)
-    .bindPopup(newEtape.name);
+    .bindPopup(newEtape.name)
     
 
     //on map
@@ -68,8 +83,16 @@ myMap.value.on('click',(e)=>{
 
     // marker save with id in MarkerObject
     markerObjects.value[newEtape.id]=marker
+  //  console.log("Point created ",newEtape)
+  //  console.log("Marker created",marker)
 });
 });
+
+
+
+
+
+
 
 // updating the color using Leaflet's built-in function
 const updateMarkerColor = (data) =>{
@@ -82,7 +105,9 @@ const updateMarkerColor = (data) =>{
         marker.redraw();
     }
 }
+    
 
+    
 
 // function for find user'ss location
 const findMyLocation =()=>{
@@ -122,6 +147,32 @@ const findMyLocation =()=>{
     );
 }
 
+const drawRoute=()=>{
+    if(!myMap.value) return;
+
+    //remove old line if exists
+    if(routeLine.value){
+        myMap.value.removeLayer(routeLine.value)
+    }
+
+    // gel all coordinatees
+    const points =etapes.value.map(p=> [p.lat,p.lng]);
+    //need at least 2 points
+    if (points.length < 2){
+        alert("Add at least 2 points");
+        return;
+    }
+    //draw line
+    routeLine.value=L.polyline(points,{
+        color:'black',
+        weight:2.5
+    }).addTo(myMap.value);
+};
+
+
+
+
+
 </script>
 
 <style scoped>
@@ -149,6 +200,20 @@ const findMyLocation =()=>{
     cursor: pointer;
     border-radius: 4px;
 }
+
+.btn-route {
+    position: absolute;
+    top: 60px;
+    right: 15px;
+    z-index: 1000;
+    padding: 10px;
+    background-color: lightgreen;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+
 
 
 
