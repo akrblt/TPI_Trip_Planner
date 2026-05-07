@@ -15,6 +15,7 @@
 </div>
 <Sidebar :etapes="etapes" 
 @color-changed="updateMarkerColor"
+@load-route="loadRoute"
   />
 
 </div>
@@ -176,7 +177,40 @@ const drawRoute=()=>{
     }).addTo(myMap.value);
 };
 
+// load route
+const loadRoute = (data) => {
 
+    etapes.value = data;
+
+    // remove old markers
+    Object.values(markerObjects.value).forEach(m => {
+        myMap.value.removeLayer(m);
+    });
+
+    markerObjects.value = {};
+
+    // redraw markers
+    etapes.value.forEach((etape, index) => {
+
+        const marker = L.circleMarker([etape.lat, etape.lng], {
+            radius: 15,
+            fillColor: etape.color,
+            color: "#fff",
+            weight: 2,
+            fillOpacity: 0.9
+        })
+        .addTo(myMap.value)
+        .bindPopup(`Point ${index + 1}`)
+        .bindTooltip(`${index + 1}`, {
+            permanent: true,
+            direction: 'top',
+            className: 'number-label'
+        });
+
+        markerObjects.value[etape.id] = marker;
+    });
+
+};
 
 
 
