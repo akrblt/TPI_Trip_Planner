@@ -1,6 +1,14 @@
 <template>
     <div class="sidebar">
         <h3>My etapes</h3>
+
+        
+        <div class="btn-storage">
+    <RouteStorage
+:etapes="etapes"
+@load-route="$emit('load-route',$event)"
+/>
+</div>
         <div v-if="etapes.length === 0" class="empty-msg">
             No points added. Click on the map!
         </div>
@@ -26,7 +34,9 @@
 
 //import { point } from 'leaflet';
 import EtapeItem from './EtapeItem.vue';
+import RouteStorage from './RouteStorage.vue';
 defineProps(['etapes'])
+defineEmits(['color-changed','load-route'])
 
 
 
@@ -47,5 +57,14 @@ defineProps(['etapes'])
     font-style: italic;
     margin-top: 20px;
 }
+
+.btn-storage {
+   margin-top: 10px;
+   margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
 
 </style>
