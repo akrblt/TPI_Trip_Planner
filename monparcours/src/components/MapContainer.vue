@@ -57,11 +57,12 @@ myMap.value.on('click',(e)=>{
         name: "Point "+ (etapes.value.length+1),
         comment: "" ,// for commentaire
         color:'#4595fc',
-        arrivalTime:''
+        arrivalTime:'',
+        order:etapes.value.length+1
     };
     etapes.value.push(newEtape);
 
-    const number=etapes.value.length
+    const number=newEtape.order
     
 
     //  use `circleMarker` when creating markers because it’s easier to change its color
@@ -91,7 +92,7 @@ myMap.value.on('click',(e)=>{
 
     // marker save with id in MarkerObject
     markerObjects.value[newEtape.id]=marker
-  //  console.log("Point created ",newEtape)
+   // console.log("Point created ",newEtape)
   //  console.log("Marker created",marker)
 });
 });

@@ -17,14 +17,28 @@ const emit=defineEmits([
 ]);
 
 const saveRoute=()=>{
+    if(!props.etapes || props.etapes.length ===0){
+        return alert("Nothing to save! Please add some points first") 
+    }
     localStorage.setItem("myRoute",JSON.stringify(props.etapes));
     alert("Saved!");
 };
 
 const loadRoute=()=>{
     const data=localStorage.getItem("myRoute");
-    if(!data) return alert("No route");
-    emit("load-route",JSON.parse(data))
+    if(!data || data === "[]") {
+        return alert("No route found in storage!");
+
+    } 
+    try {
+        const parsedData=JSON.parse(data);
+        emit("load-route",JSON.parse(data));
+
+    } catch (e) {
+        alert("Error parsing stored data.")
+        console.error(e);
+    }
+    
 }
 
 </script>
