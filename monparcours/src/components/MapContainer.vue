@@ -51,14 +51,14 @@ onMounted(()=>{
     // when onclick , new points add
 myMap.value.on('click',(e)=>{
     const newEtape={
-        id:Date.now(),
-        lat: e.latlng.lat,
-        lng:e.latlng.lng,
-        name: "Point "+ (etapes.value.length+1),
-        comment: "" ,// for commentaire
-        color:'#4595fc',
-        arrivalTime:'',
-        order:etapes.value.length+1
+        id:Date.now(), // miliseconde unique Integer
+        lat: e.latlng.lat, //float
+        lng:e.latlng.lng, //float
+        name: "Point "+ (etapes.value.length+1), // string
+        comment: "" ,// for commentaire // string
+        color:'#4595fc', // string (hex)
+        arrivalTime:'', // string
+        order:etapes.value.length+1 // number(integer)
     };
     etapes.value.push(newEtape);
 
@@ -129,14 +129,28 @@ const findMyLocation =()=>{
     // ask ==> permission and get position
     navigator.geolocation.getCurrentPosition(
         (position)=>{
+            console.log(position.coords);
             const lat=position.coords.latitude;
             const lng=position.coords.longitude;
+            const accuracy=position.coords.accuracy;
             // move map to users loca and add a markerr
             if(myMap.value){
                    myMap.value.setView([lat,lng],15);
+                   // dinamic pop up message
+                   let popupMessage=` <br>You are here!</b> `;
+                   //if accuracy > 150 meter 
+                   if(accuracy>150){
+                    popupMessage+=`<br/><i>Précision : ${Math.round(accuracy)} mètres</i>`;
+                   
+                   // tecnic control if accuarcy >500
+                   if(accuracy >500) {
+                    popupMessage +=`<br/>⚠️ <i>Low precision detected  (IP location).</i>`;
+                   // console.warn(`Low accuracy location: ${accuracy}m. Precision issues expected on Desktop.`)
+                   }
+                }
             L.marker([lat,lng])
             .addTo(myMap.value)
-            .bindPopup(" You are here !!!")
+            .bindPopup(popupMessage)
             .openPopup();
         }
 
@@ -152,6 +166,10 @@ const findMyLocation =()=>{
         }
        
         alert("Location denied. Showing Yverdon Les Bains")
+    }, {
+         enableHighAccuracy:true,
+      timeout:10000,
+      maximumAge:0
     }
     );
 }
