@@ -5,7 +5,7 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   plugins: [vue()],
   test: {
-    // il must be jsdom for vitest
+    // it must be jsdom for vitest
     environment: 'jsdom',
     globals:true, 
   }
