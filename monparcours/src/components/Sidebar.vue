@@ -49,7 +49,6 @@ defineEmits(['color-changed','load-route'])
     border-left: 1px solid #ddd;
     padding: 15px;
     overflow-y:auto ;
-
 }
 
 .empty-msg {
